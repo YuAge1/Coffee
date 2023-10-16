@@ -15,6 +15,13 @@ namespace Coffee.Controllers
             return View();
         }
 
+        public ActionResult Users()
+        {
+            var listUsers = new List<string>();
+
+            return View(listUsers);
+        }
+
         // GET: AdminController/Details/5
         public ActionResult Details(int id)
         {
