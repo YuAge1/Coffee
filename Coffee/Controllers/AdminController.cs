@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Coffee.Models.Entities;
+using Coffee.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +9,13 @@ namespace Coffee.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
+        private NewsRepository _newsRepository;
+
+        public AdminController(NewsRepository newsRepository)
+        {
+            _newsRepository = newsRepository;
+        }
+
         // GET: AdminController
         public ActionResult Index()
         {
@@ -20,6 +29,13 @@ namespace Coffee.Controllers
             var listUsers = new List<string>();
 
             return View(listUsers);
+        }
+
+        public async Task<ActionResult> News()
+        {
+            var listNews = await _newsRepository.GetNewsAsync();
+
+            return View(listNews);
         }
 
         // GET: AdminController/Details/5

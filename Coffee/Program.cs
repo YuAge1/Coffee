@@ -1,5 +1,6 @@
 using Coffee.Data;
 using Coffee.Models;
+using Coffee.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,9 @@ namespace Coffee
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
             //builder.Services.AddRazorPages();
+
+
+            builder.Services.AddTransient<NewsRepository>();
 
             var app = builder.Build();
 
