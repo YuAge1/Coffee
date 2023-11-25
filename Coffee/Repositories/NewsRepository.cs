@@ -23,6 +23,11 @@ namespace Coffee.Repositories
             return await _context.News.Where(x => x.IsActive).ToListAsync();
         }
 
+        public async Task<News> GetOneNewsAsync(int id)
+        {
+            return await _context.News.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
         public async Task<News> CreateNewsAsync(News news)
         {
             _context.News.Add(news);
@@ -30,12 +35,34 @@ namespace Coffee.Repositories
             {
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
 
             return news;
+        }
+
+        public async Task<News> UpdateNewsAsync(News news)
+        {
+            var item = await _context.News.Where(x => x.Id == news.Id).FirstOrDefaultAsync();
+
+            item.Title = news.Title;
+            item.Text = news.Text;
+            item.Date = news.Date;
+            item.IsActive = news.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return item;
+        }
+
+        public async Task DeleteNewsAsync(int id)
+        {
+            var item = await _context.News.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            _context.News.Remove(item);
+            await _context.SaveChangesAsync();
         }
 
     }

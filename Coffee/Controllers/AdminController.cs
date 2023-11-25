@@ -64,6 +64,35 @@ namespace Coffee.Controllers
             return Redirect("/Admin/News");
         }
 
+        [Route("/admin/news/edit/{id}")]
+        [HttpGet]
+        public async Task<ActionResult> EditNews(int id)
+        {
+            var news = await _newsRepository.GetOneNewsAsync(id);
+
+            return View(news);
+        }
+
+        [Route("/admin/news/edit/{id}")]
+        [HttpPost]
+        public async Task<ActionResult> Edit(News news)
+        {
+            news.Date = DateTime.SpecifyKind(news.Date, DateTimeKind.Utc);
+
+            var result = await _newsRepository.UpdateNewsAsync(news);
+
+            return Redirect("/Admin/News");
+        }
+
+        [Route("/admin/news/delete/{id}")]
+        [HttpGet]
+        public async Task<ActionResult> DeleteNews(int id)
+        {
+            await _newsRepository.DeleteNewsAsync(id);
+
+            return Redirect("/Admin/News");
+        }
+
         // GET: AdminController/Details/5
         public ActionResult Details(int id)
         {
