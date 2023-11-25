@@ -11,10 +11,13 @@ namespace Coffee.Controllers
     public class AdminController : Controller
     {
         private NewsRepository _newsRepository;
+        private DataRepository _dataRepository;
 
-        public AdminController(NewsRepository newsRepository)
+        public AdminController(NewsRepository newsRepository
+            , DataRepository dataRepository)
         {
             _newsRepository = newsRepository;
+            _dataRepository = dataRepository;
         }
 
         // GET: AdminController
@@ -25,11 +28,27 @@ namespace Coffee.Controllers
             return View();
         }
 
-        public ActionResult Users()
+        public async Task<ActionResult> Users()
         {
-            var listUsers = new List<string>();
+            var list = await _dataRepository.GetUsersAsync();
 
-            return View(listUsers);
+            return View(list);
+        }
+
+        [Route("/admin/users/block/{id}")]
+        public async Task<ActionResult> BlockUsers(string id)
+        {
+            await _dataRepository.BlockUsersAsync(id);
+
+            return Redirect("/Admin/Users");
+        }
+
+        [Route("/admin/users/unblock/{id}")]
+        public async Task<ActionResult> UnBlockUsers(string id)
+        {
+            await _dataRepository.UnBlockUsersAsync(id);
+
+            return Redirect("/Admin/Users");
         }
 
         public async Task<ActionResult> News()
